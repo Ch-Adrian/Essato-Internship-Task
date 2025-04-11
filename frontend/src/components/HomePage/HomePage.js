@@ -2,17 +2,23 @@ import React from 'react';
 import Topbar from '../Topbar/Topbar';
 import './HomePage.css';
 import bgImage from '../../assets/background-home.jpg';
+import { useNavigate } from 'react-router-dom';
 
 function HomePage(){
+    const navigate = useNavigate();
+
+    const navigateLocations = () => {
+      navigate('/locations'); 
+    };
 
     return (<div>
         <Topbar/>
         <div className="hero" style={{backgroundImage: `url(${bgImage})`,}}>
         <div className="menu-box">
             <h1>Welcome</h1>
-            <button className="menu-btn">Locations</button>
+            <button className="menu-btn" onClick={navigateLocations}>Locations</button>
             <button className="menu-btn">Data</button>
-            <button className="menu-btn">Contact</button>
+            {/* <button className="menu-btn">Contact</button> */}
         </div>
         </div>
         <div className='credits'>
