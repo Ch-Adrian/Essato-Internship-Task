@@ -7,6 +7,7 @@ export const useLocations = () => useContext(LocationContext); // custom hook fo
 
 export const LocationProvider = ({ children }) => {
   const [locations, setLocations] = useState([]);
+  const [temperatures, setTemperatures] = useState([]);
 
   useEffect(() => {
     const fetchLocations = async () => {
@@ -45,6 +46,41 @@ export const LocationProvider = ({ children }) => {
 
   };
 
+  const addTemperature = async (location, temp) => {
+    const response = await axios.post(`http://localhost:8080/locations/${location}/temperature`, {
+        name: location.name,
+        temperature: temp
+      });
+    
+    let wasPlaced = false;
+    temperatures.forEach((elem) => {
+        if(elem.name === location){
+            elem.temperatures.push(temp);
+            wasPlaced = true;
+            return;
+        }
+    })
+    if(wasPlaced === false){
+        temperatures.push({name: location, temperatures: [temp]})
+        wasPlaced = true;
+    }
+    setTemperatures(temperatures);
+
+  }
+
+  const getTemperatures = async (location) => {
+    if(location !== '' || location !== null){
+        const response = await axios.get(`http://localhost:8080/locations/${location}/temperatures`);
+        let temps = []
+        response.data.forEach((element) => {
+            temps.push(element.temperature)
+
+        })
+
+        setTemperatures([{name: location, temperatures: temps}])
+    }
+  }
+
   const handleSort = (isAsc) => {
     locations.sort((a, b) => {
         if (a.name < b.name) return -1;
@@ -66,9 +102,12 @@ const deleteLocation = (index) => {
 
   const value = {
     locations,
+    temperatures,
     addLocation,
     handleSort,
-    deleteLocation
+    deleteLocation,
+    addTemperature,
+    getTemperatures
   };
 
   return (

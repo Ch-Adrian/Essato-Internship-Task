@@ -9,9 +9,9 @@ import pl.edu.adrian.forge.backend.services.LocationService;
 import java.util.List;
 import java.util.Date;
 
-@CrossOrigin
 @RestController
 @RequestMapping("/locations")
+@CrossOrigin(origins = "http://localhost:3000")
 public class LocationController {
 
     @Autowired
