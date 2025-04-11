@@ -10,6 +10,10 @@ function HomePage(){
     const navigateLocations = () => {
       navigate('/locations'); 
     };
+    
+    const navigateData = () => {
+        navigate('/data'); 
+    };
 
     return (<div>
         <Topbar/>
@@ -17,7 +21,7 @@ function HomePage(){
         <div className="menu-box">
             <h1>Welcome</h1>
             <button className="menu-btn" onClick={navigateLocations}>Locations</button>
-            <button className="menu-btn">Data</button>
+            <button className="menu-btn" onClick={navigateData}>Data</button>
             {/* <button className="menu-btn">Contact</button> */}
         </div>
         </div>

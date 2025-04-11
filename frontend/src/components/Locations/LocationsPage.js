@@ -1,4 +1,4 @@
-import React, { act, useState } from 'react';
+import React, { useState } from 'react';
 import Topbar from '../Topbar/Topbar';
 import './LocationsPage.css';
 import bgImageLeft from '../../assets/left-image.jpg';
@@ -15,6 +15,7 @@ function LocationsPage(){
     const pageSize = 9;
     const [location, setLocation] = useState('');
     const [isInEU, setIsInEU] = useState(false);
+    const [resetState, setResetState] = useState(false);
     const { locations, addLocation, handleSort, deleteLocation } = useLocations();
     let pages = [];
     let numOfPages = Math.ceil(locations.length/pageSize);
@@ -47,8 +48,8 @@ function LocationsPage(){
         e.preventDefault();
 
         if (location.trim() === '') return;
-        
-        addLocation({name: location, isEu: isInEU})
+
+        addLocation({name: location, isEU: isInEU})
         setIsInEU(false);
       };
 
@@ -63,8 +64,8 @@ function LocationsPage(){
                 <div className="locations-box">
                     <div>
                     <h1>Locations</h1>
-                    <Button variant="primary" className='sortBtn' onClick={(e) => {handleSort(true); setIsInEU(!isInEU);}}>Sort Ascending</Button>
-                    <Button variant="primary" className='sortBtn' onClick={(e) => {handleSort(false); setIsInEU(!isInEU);}}>Sort Descending</Button>
+                    <Button variant="primary" className='sortBtn' onClick={(e) => {handleSort(true); setResetState(!resetState);}}>Sort Ascending</Button>
+                    <Button variant="primary" className='sortBtn' onClick={(e) => {handleSort(false); setResetState(!resetState);}}>Sort Descending</Button>
                     </div>
                     <div>
                     <ListGroup>
@@ -77,8 +78,8 @@ function LocationsPage(){
                                     <div className="ms-2 me-auto">
                                     <div className="fw-bold">{item.name}</div>
                                     </div>
-                                    <Button className="d-flex justify-content-center align-items-center delete-btn" onClick={() => {deleteLocation(index); setIsInEU(!isInEU);}} >X</Button>
-                                    {item.isEu ? 
+                                    <Button className="d-flex justify-content-center align-items-center delete-btn" onClick={() => {deleteLocation(index); setResetState(!resetState);}} >X</Button>
+                                    {item.isEU ? 
                                     <Badge bg="primary" pill>
                                     EU
                                     </Badge> : null}

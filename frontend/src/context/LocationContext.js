@@ -6,13 +6,17 @@ const LocationContext = createContext();
 export const useLocations = () => useContext(LocationContext); // custom hook for easier use
 
 export const LocationProvider = ({ children }) => {
-  const [locations, setLocations] = useState([{name: 'Warsaw', isEu: true}, {name: 'London', isEu: false}, {name: 'New York', isEu: false}, {name: 'Madrit', isEu: true}, {name: 'Rome', isEu: true}]);
+  const [locations, setLocations] = useState([]);
 
   useEffect(() => {
     const fetchLocations = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/locations');
-        setLocations(response.data);
+        const response = await axios.get('http://localhost:8080/locations');
+        let loc2 = []
+        response.data.forEach((location) => {
+            loc2.push({name: location.name, isEU: location.eu})
+        })
+        setLocations(loc2);
       } catch (error) {
         console.error('Error fetching locations:', error);
       }
@@ -21,8 +25,24 @@ export const LocationProvider = ({ children }) => {
     fetchLocations();
   }, []);
 
-  const addLocation = (location) => {
+  const addLocation = async (location) => {
+    let present = false;
+    locations.forEach((elem) => {
+        if(elem.name === location.name){
+            present = true;
+            return;
+        }
+    })
+    if(present) return;
+    console.log('added')
+    const response = await axios.post(`http://localhost:8080/locations`, {
+        name: location.name,
+        isEU: location.isEU,
+        dateOfCreation: new Date().toJSON().slice(0, 10)
+      });
+
     setLocations((prev) => [...prev, location]);
+
   };
 
   const handleSort = (isAsc) => {
@@ -37,6 +57,9 @@ export const LocationProvider = ({ children }) => {
 }
 
 const deleteLocation = (index) => {
+    console.log(locations[index])
+    const response = axios.delete(`http://localhost:8080/locations/${locations[index].name}`);
+
     locations.splice(index, 1);
     setLocations(locations);
 }
