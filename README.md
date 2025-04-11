@@ -22,9 +22,6 @@ inside backend directory run (for Windows):
 >.\mvnw compile to build\
 >.\mvnw clean to clean project\
 
-for linux You have to replace .\mvnw with mvn.\
 3. database:\
-Database is placed inside docker container.
-It should be available along with running springboot app.
-Alternatively to use database type in console in current directory:
-> docker-compose up
+Database is placed inside docker container.\
+It should be available together with running springboot app.
